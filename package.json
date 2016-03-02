@@ -1,0 +1,60 @@
+{
+    "name": "chart-color-js",
+    "version": "1.0.0",
+    "description": "Generator colors for the charts. It was planned to be used with Chart.js",
+    "main": "chart-colors.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PragmaWolf/chartColorJS.git"
+    },
+    "keywords": [
+        "chart",
+        "color",
+        "generator",
+        "collection",
+        "random"
+    ],
+    "author": "PragmaWolf",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PragmaWolf/chartColorJS/issues"
+    },
+    "homepage": "https://github.com/PragmaWolf/chartColorJS#readme",
+    "jscsConfig": {
+        "disallowTrailingWhitespace": true,
+        "maximumLineLength": false,
+        "preset": "google",
+        "maxErrors": -1,
+        "validateIndentation": 4
+    },
+    "jshintConfig": {
+        "bitwise": true,
+        "browser": true,
+        "curly": true,
+        "devel": true,
+        "eqeqeq": true,
+        "esversion": 6,
+        "forin": true,
+        "globals": {
+            "angular": true,
+            "Velocity": true,
+            "Chart": true
+        },
+        "globalstrict": true,
+        "indent": 4,
+        "jquery": true,
+        "noarg": true,
+        "mocha": true,
+        "node": true,
+        "noempty": true,
+        "nonew": true,
+        "phantom": true,
+        "strict": true,
+        "trailing": true,
+        "typed": true,
+        "undef": true
+    }
+}
