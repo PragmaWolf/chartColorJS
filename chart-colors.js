@@ -20,7 +20,9 @@
     this.ChartColors = function(infinitely) {
         /**
          * Текущий объект.
-         * @type {ChartColors|{DefaultColorSet, UserColorSet, GetRandom, GetRandomList, GetColorSet, GetUsedColors, GetUnusedColors, GetNext, GetList, Reset}}
+         * @type {ChartColors|{DefaultColorSet, UserColorSet, GetRandom, GetRandomList, GetColorSet, GetUsedColors,
+         *     GetUnusedColors, GetNext, GetList, Reset, ConvertRGBToHEX, ConvertHEXToRGB, ConvertHEXToRGBA,
+         *     ConvertList}}
          */
         var self = this;
 
@@ -34,7 +36,7 @@
         var _infinitely = !!infinitely;
 
         /**
-         * Предустановленный набор цветов. Взять из Google Material Colors.
+         * Предустановленный набор цветов. Взято из Google Material Colors.
          * @type {string[]}
          * @private
          */
@@ -255,10 +257,35 @@
         self.Reset = Reset;
 
         /**
+         * Преобразование RGB или RGBA значений в HEX.
+         * @type {ConvertRGBToHEX}
+         */
+        self.ConvertRGBToHEX = ConvertRGBToHEX;
+
+        /**
+         * Преобразование цвета из формата HEX в формат RGB.
+         * @type {ConvertHEXToRGB}
+         */
+        self.ConvertHEXToRGB = ConvertHEXToRGB;
+
+        /**
+         * Преобразование цвета из формата HEX в формат RGBA.
+         * @type {ConvertHEXToRGBA}
+         */
+        self.ConvertHEXToRGBA = ConvertHEXToRGBA;
+
+        /**
+         * Преобразование массива с набором цветов в HEX, RGB или RGBA формат.
+         * @type {ConvertList}
+         */
+        self.ConvertList = ConvertList;
+
+        /**
          * Проверка переданного массива.
          * Проверяет является ли переданный параметр массивом.
+         * Сделано на основе lodash.isArray.
          *
-         * @param {Array} arr Массив для проверки
+         * @param {Array} arr Массив для проверки.
          * @returns {boolean} FALSE - переданный параметр не является массивом или является пустым массивом.
          * TRUE - переданный параметр является не пустым массивом.
          */
@@ -272,8 +299,7 @@
 
             // проверка на то что передан массив
             if (!(arr instanceof Array) ||
-                Object.prototype.toString.call(arr) !== '[object Array]' ||
-                !(arr.splice instanceof Function) ||
+                Object.prototype.toString.call(arr) !== '[object Array]' || !(arr.splice instanceof Function) ||
                 arr.length === 0) {
 
                 isArray = false;
@@ -311,7 +337,7 @@
          * Установка пользовательского набора (массива) цветов.
          * Если пользовательский набор не передан, то будет взят набор по-умолчанию из текущего объекта.
          *
-         * @param {Array} colors
+         * @param {Array} colors Массив с набором пользовательских цветов.
          * @returns {ChartColors} Текущий объект.
          */
         function UserColorSet(colors) {
@@ -361,7 +387,7 @@
         /**
          * Получение текущего набора цветов.
          *
-         * @returns {Array}
+         * @returns {Array} Массив с существующим набором цветов.
          */
         function GetColorSet() {
             return _colorSet;
@@ -407,7 +433,7 @@
          * Генерация списка (массива) цветов заданной длины.
          *
          * @param {number} length Длина списка (массива).
-         * @returns {Array} Массив с полученными цветами.
+         * @returns {Object[]} Массив с полученными цветами.
          */
         function GetList(length) {
             // формирование списка цветов
@@ -422,13 +448,146 @@
         /**
          * Сброс объекта до состояния по-умолчанию. Не будет сброшен только параметр infinitely.
          *
-         * @returns {ChartColors}
+         * @returns {ChartColors} Текущий объект.
          */
         function Reset() {
             _usedColors = [];
             _colorSet = _defaultColorSet.slice();
             _unusedColors = _colorSet.slice();
             return self;
+        }
+
+        /**
+         * Преобразование RGB или RGBA значений в HEX.
+         * Если передано RGBA, то значение альфа-канала будет отброшено.
+         *
+         * @param {string} value Цвет в формате RGB или RGBA.
+         * @returns {string|boolean} Строка с цветом в формате HEX или FALSE, если что-то пошло не так.
+         */
+        function ConvertRGBToHEX(value) {
+            if (!value) {
+                return false;
+            }
+
+            if (value.charAt(0) === '#') {
+                return false;
+            }
+
+            // получаем значения цветов
+            var pattern = /(\d{1,3})/ig;
+            var colors = (value.toString()).match(pattern);
+            // преобразуем цвета в HEX
+            colors = colors.slice(0, 3);
+            colors = colors.map(function(val) {
+                var hex = parseInt(val, 10).toString(16);
+                return (hex.length === 1) ? '0' + hex : hex;
+            });
+
+            return '#' + colors.join('');
+        }
+
+        /**
+         * Преобразование цвета из формата HEX в формат RGB.
+         *
+         * @param {string} value Строка с цветом в формате HEX.
+         * @returns {string|boolean} Строка с цветом в формате RGB или FALSE, если что-то пошло не так.
+         */
+        function ConvertHEXToRGB(value) {
+            if (!value) {
+                return false;
+            }
+
+            // преобразуем цвет в RGB
+            var rgb = ParseHEX(value);
+            if (!rgb) {
+                return false;
+            }
+
+            return 'rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')';
+        }
+
+        /**
+         * Преобразование цвета из формата HEX в формат RGBA.
+         *
+         * @param {string} value Строка с цветом в формате HEX.
+         * @param {number} alpha Значение альфа-канала для цвета.
+         * @returns {string|boolean} Строка с цветом в формате RGBA или FALSE, если что-то пошло не так.
+         */
+        function ConvertHEXToRGBA(value, alpha) {
+            if (!value) {
+                return false;
+            }
+
+            // если не указан альфа-канал, устанавливаем по умолчанию
+            alpha = parseFloat(alpha);
+            if (!alpha) {
+                alpha = 0.5;
+            }
+
+            // преобразуем цвет в RGB
+            var rgb = ParseHEX(value);
+            if (!rgb) {
+                return false;
+            }
+
+            return 'rgba(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + alpha + ')';
+        }
+
+        /**
+         * Преобразование РУЧ значения цвета в массив RGB
+         * Использована функция со Stackoverflow.
+         *
+         * @param {string} value Цвет в формате HEX для преобразования.
+         * @returns {{r:number, g:number, b:number}} Массив с цветом разбитым на RGB составляющие.
+         * @see http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+         */
+        function ParseHEX(value) {
+            // Преобразование короткой записи цвета в HEX формате (#fff) к нормальной (#ffffff)
+            if (value.length < 6) {
+                var pattern = /^#?([a-f\d])([a-f\d])([a-f\d])/i;
+                value = value.replace(pattern, function(m, r, g, b) {
+                    return '#' + r + r + g + g + b + b;
+                });
+            }
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i.exec(value);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : false;
+        }
+
+        /**
+         * Преобразование массива с набором цветов в HEX, RGB или RGBA формат.
+         * Если не указан формат в который преобразовать массив или такого формата не предусмотрено, то по-умолчанию будет использоваться HEX.
+         * Если передаваемый массив уже заполнен цветами в нужном формате, то возвращаемый массив будет заполнен значениями FALSE.
+         *
+         * @param {Object[]} list Массив с цветами для преобрахзования.
+         * @param {string} covertTo Строка с названием формата в который необходимо преобразовать цвета в массиве. Может принимать варианты
+         * @param {number} alpha Значение альфа-канала для всех цветов при преобразовании в формат RGBA.
+         * @returns {Object[]} Массив заполненный цветами переведенными в указанный формат, либо заполненный значениями FALSE.
+         */
+        function ConvertList(list, covertTo, alpha) {
+            // передан ли массив для конвертирования
+            if (!CheckArray(list)) {
+                return false;
+            }
+
+            // список возможных конвертеров цветов
+            var converters = {
+                hex:  ConvertRGBToHEX,
+                rgb:  ConvertHEXToRGB,
+                rgba: ConvertHEXToRGBA
+            };
+            // проверка передан ли тип конвертирования
+            covertTo = ('' + covertTo).toLowerCase();
+            // конвертер по-умолчанию - HEX
+            var converter = converters[covertTo] || converters.hex;
+
+            return list.map(function(color) {
+                return converter(color, alpha);
+            });
         }
 
         return self;
