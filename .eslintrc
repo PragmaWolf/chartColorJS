@@ -1,0 +1,177 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "extends": [
+    "google",
+    "angular"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jquery": true
+  },
+  "plugins": [
+    "angular"
+  ],
+  "globals": {
+    "Chart": true,
+    "legend": true
+  },
+  "rules": {
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "camelcase": [
+      "error",
+      {
+        "properties": "always"
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "never",
+        "objects": "never",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never"
+      }
+    ],
+    "curly": [
+      "error",
+      "all"
+    ],
+    "eqeqeq": [
+      "error",
+      "always"
+    ],
+    "generator-star-spacing": [
+      "error",
+      "before"
+    ],
+    "guard-for-in": [
+      "error"
+    ],
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "key-spacing": [
+      "error",
+      {
+        "mode": "minimum"
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "max-len": [
+      "error",
+      120,
+      4,
+      {
+        "ignoreComments": true,
+        "ignoreUrls": true,
+        "ignoreTrailingComments": true
+      }
+    ],
+    "new-cap": [
+      "error",
+      {
+        "properties": false
+      }
+    ],
+    "no-else-return": [
+      "error"
+    ],
+    "no-extra-boolean-cast": [
+      "off"
+    ],
+    "no-floating-decimal": [
+      "off"
+    ],
+    "no-implicit-coercion": [
+      "error",
+      {
+        "boolean": false,
+        "number": false,
+        "string": false
+      }
+    ],
+    "no-invalid-this": [
+      "off"
+    ],
+    "no-trailing-spaces": [
+      "warn",
+      {
+        "skipBlankLines": true
+      }
+    ],
+    "no-undefined": [
+      "error"
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "args": "none"
+      }
+    ],
+    "no-useless-return": [
+      "error"
+    ],
+    "no-var": [
+      "off"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "quote-props": [
+      "error",
+      "as-needed"
+    ],
+    "require-jsdoc": [
+      "warn",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true
+        }
+      }
+    ],
+    "space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    "valid-jsdoc": [
+      "error",
+      {
+        "requireReturn": false
+      }
+    ],
+    "angular/no-service-method": [
+      "off"
+    ],
+    "angular/di": [
+      "error",
+      "$inject"
+    ],
+    "angular/controller-as-vm": [
+      "error",
+      "self"
+    ]
+  }
+}
