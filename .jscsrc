@@ -1,7 +1,0 @@
-{
-    "disallowTrailingWhitespace": true,
-    "maximumLineLength": false,
-    "preset": "google",
-    "maxErrors": -1,
-    "validateIndentation": 4
-}
